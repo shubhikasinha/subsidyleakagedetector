@@ -1,3 +1,84 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* Custom Theme Colors for JanAvlokan */
+@theme {
+  --color-primary: #2c1100;
+  --color-primary-dark: #1a0a00;
+  --color-primary-light: #4a2510;
+  --color-secondary: #735847;
+  --color-secondary-dark: #5a4538;
+  --color-secondary-light: #a68674;
+  --color-accent: #d4a574;
+  --color-accent-light: #e8c9a8;
+  --color-neutral-lightest: #faf8f6;
+  --color-neutral-light: #f5f0eb;
+  --color-neutral: #e8e0d8;
+  --color-neutral-dark: #d4ccc4;
+  --color-govt-saffron: #ff9933;
+  --color-govt-green: #138808;
+  --color-govt-blue: #000080;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-heading: 'Outfit', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-family-sans);
+    @apply text-gray-800 bg-white antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family-heading);
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .govt-header-bar {
+    @apply bg-primary text-white text-xs py-1.5 px-4 text-center;
+  }
+
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white font-medium py-3 px-6 rounded-lg transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md border border-neutral-dark/20 p-6 transition-all duration-200 hover:shadow-lg;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-primary mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-secondary mb-8 max-w-2xl;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  .font-heading {
+    font-family: var(--font-family-heading);
+  }
+
+  .font-sans {
+    font-family: var(--font-family-sans);
+  }
+}
