@@ -5,14 +5,15 @@ export async function GET() {
   try {
     const bigquery = getBigQueryClient();
 
+    // KPIs - Top summary cards
+    // SOURCE: fraud_with_explanations (has flag columns for explainability)
     const query = `
       SELECT
-        COUNT(*) AS total_records,
-        COUNTIF(is_anomaly = TRUE) AS anomalies_detected,
-        ROUND(COUNTIF(is_anomaly = TRUE) * 100.0 / COUNT(*), 2) AS anomaly_percentage,
-        ROUND(AVG(mean_squared_error), 4) AS avg_risk_score,
-        MAX(CURRENT_TIMESTAMP()) AS last_model_run
-      FROM \`gfg-fot.lpg_fraud_detection.fraud_results\`
+        COUNT(*) AS total_beneficiaries,
+        COUNTIF(risk_level = 'HIGH') AS high_risk,
+        COUNTIF(risk_level = 'MEDIUM') AS medium_risk,
+        COUNTIF(risk_level = 'LOW') AS low_risk
+      FROM \`gfg-fot.lpg_fraud_detection.fraud_with_explanations\`
     `;
 
     const [job] = await bigquery.createQueryJob({ query });
@@ -20,20 +21,18 @@ export async function GET() {
 
     if (rows.length === 0) {
       return NextResponse.json({
-        total_records: 0,
-        anomalies_detected: 0,
-        anomaly_percentage: 0,
-        avg_risk_score: 0,
-        last_model_run: new Date().toISOString(),
+        total_beneficiaries: 0,
+        high_risk: 0,
+        medium_risk: 0,
+        low_risk: 0,
       } as DashboardSummary);
     }
 
     const result: DashboardSummary = {
-      total_records: Number(rows[0].total_records),
-      anomalies_detected: Number(rows[0].anomalies_detected),
-      anomaly_percentage: Number(rows[0].anomaly_percentage),
-      avg_risk_score: Number(rows[0].avg_risk_score),
-      last_model_run: rows[0].last_model_run?.value || new Date().toISOString(),
+      total_beneficiaries: Number(rows[0].total_beneficiaries),
+      high_risk: Number(rows[0].high_risk),
+      medium_risk: Number(rows[0].medium_risk),
+      low_risk: Number(rows[0].low_risk),
     };
 
     return NextResponse.json(result);

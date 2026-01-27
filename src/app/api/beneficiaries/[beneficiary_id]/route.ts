@@ -1,4 +1,5 @@
-import { getBigQueryClient, BeneficiaryDetail, generateRiskReasons } from '@/lib/bigquery';
+import { getBigQueryClient, BeneficiaryDetail, generateReasonsFromFlags } from '@/lib/bigquery';
+import { generateGeminiExplanation, flagsToReasonCodes } from '@/lib/gemini';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -7,6 +8,8 @@ export async function GET(
 ) {
   try {
     const { beneficiary_id } = await params;
+    const searchParams = request.nextUrl.searchParams;
+    const language = (searchParams.get('lang') || 'hinglish') as 'en' | 'hi' | 'hinglish';
 
     if (!beneficiary_id) {
       return NextResponse.json(
@@ -17,33 +20,24 @@ export async function GET(
 
     const bigquery = getBigQueryClient();
 
-    // Exact SQL as per requirement - Full beneficiary detail
+    // Get all data from fraud_with_explanations (single source of truth)
     const query = `
       SELECT
-        fr.beneficiary_id,
-        fr.is_anomaly,
-        fr.mean_squared_error AS risk_score,
-        fr.total_txns,
-        fr.avg_amount,
-        fr.txns_last_30d,
-        fr.unique_dealers,
-        fr.cross_district_txns,
-        b.residence_district,
-        b.residence_block,
-        b.household_size,
-        b.income_bracket
-      FROM \`gfg-fot.lpg_fraud_detection.fraud_results\` fr
-      JOIN \`gfg-fot.lpg_fraud_detection.Beneficiaries\` b
-      ON fr.beneficiary_id = b.beneficiary_id
-      WHERE fr.beneficiary_id = @beneficiary_id
+        beneficiary_id,
+        risk_level,
+        mean_squared_error,
+        flag_high_recent_activity,
+        flag_multiple_dealers,
+        flag_cross_district,
+        flag_high_lifetime_usage
+      FROM \`gfg-fot.lpg_fraud_detection.fraud_with_explanations\`
+      WHERE beneficiary_id = @beneficiary_id
     `;
 
-    const options = {
-      query,
-      params: { beneficiary_id },
-    };
-
-    const [job] = await bigquery.createQueryJob(options);
+    const [job] = await bigquery.createQueryJob({ 
+      query, 
+      params: { beneficiary_id } 
+    });
     const [rows] = await job.getQueryResults();
 
     if (rows.length === 0) {
@@ -54,25 +48,39 @@ export async function GET(
     }
 
     const row = rows[0];
+    
+    // Extract flags (deterministic - from BigQuery)
+    const flags = {
+      high_recent_activity: Boolean(row.flag_high_recent_activity),
+      multiple_dealers: Boolean(row.flag_multiple_dealers),
+      cross_district: Boolean(row.flag_cross_district),
+      high_lifetime_usage: Boolean(row.flag_high_lifetime_usage),
+    };
+
+    // Generate deterministic reasons from flags
+    const reasons = generateReasonsFromFlags(flags);
+
+    // Generate AI-polished explanation via Gemini (optional, with fallback)
+    const reasonCodes = flagsToReasonCodes({
+      flag_high_recent_activity: flags.high_recent_activity,
+      flag_multiple_dealers: flags.multiple_dealers,
+      flag_cross_district: flags.cross_district,
+      flag_high_lifetime_usage: flags.high_lifetime_usage,
+    });
+    
+    const geminiExplanation = await generateGeminiExplanation(
+      row.risk_level,
+      reasonCodes,
+      language
+    );
+
     const result: BeneficiaryDetail = {
       beneficiary_id: row.beneficiary_id,
-      residence_district: row.residence_district || 'Unknown',
-      residence_block: row.residence_block || 'Unknown',
-      household_size: Number(row.household_size) || 0,
-      income_bracket: row.income_bracket || 'Unknown',
-      risk_score: Number(row.risk_score) || 0,
-      is_anomaly: row.is_anomaly || false,
-      total_txns: Number(row.total_txns) || 0,
-      avg_amount: Number(row.avg_amount) || 0,
-      txns_last_30d: Number(row.txns_last_30d) || 0,
-      unique_dealers: Number(row.unique_dealers) || 0,
-      cross_district_txns: Number(row.cross_district_txns) || 0,
-      risk_reasons: generateRiskReasons(
-        Number(row.cross_district_txns) || 0,
-        Number(row.total_txns) || 0,
-        Number(row.unique_dealers) || 0,
-        Number(row.txns_last_30d) || 0
-      ),
+      risk_level: row.risk_level || 'UNKNOWN',
+      mean_squared_error: Number(row.mean_squared_error) || 0,
+      flags,
+      reasons,
+      gemini_explanation: geminiExplanation,
     };
 
     return NextResponse.json(result);

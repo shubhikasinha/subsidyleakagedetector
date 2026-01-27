@@ -1,55 +1,52 @@
-import { getBigQueryClient, HighRiskBeneficiary, generateRiskReasons } from '@/lib/bigquery';
+import { getBigQueryClient, HighRiskBeneficiary } from '@/lib/bigquery';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const limit = Math.min(Number(searchParams.get('limit')) || 50, 100); // Max 100
+    const limit = Math.min(Number(searchParams.get('limit')) || 50, 100);
+    const riskLevel = searchParams.get('risk_level'); // Optional filter
 
     const bigquery = getBigQueryClient();
 
-    // Exact SQL as per requirement
-    const query = `
+    // Main Table with flag columns for explainability
+    // SOURCE: fraud_with_explanations
+    let query = `
       SELECT
-        fr.beneficiary_id,
-        b.residence_district,
-        fr.mean_squared_error AS risk_score,
-        fr.total_txns,
-        fr.avg_amount,
-        fr.txns_last_30d,
-        fr.unique_dealers,
-        fr.cross_district_txns
-      FROM \`gfg-fot.lpg_fraud_detection.fraud_results\` fr
-      JOIN \`gfg-fot.lpg_fraud_detection.Beneficiaries\` b
-      ON fr.beneficiary_id = b.beneficiary_id
-      WHERE fr.is_anomaly = TRUE
-      ORDER BY fr.mean_squared_error DESC
-      LIMIT @limit
+        beneficiary_id,
+        risk_level,
+        mean_squared_error,
+        flag_high_recent_activity,
+        flag_multiple_dealers,
+        flag_cross_district,
+        flag_high_lifetime_usage
+      FROM \`gfg-fot.lpg_fraud_detection.fraud_with_explanations\`
     `;
+    
+    // Add filter if risk_level specified (for drill-down)
+    if (riskLevel && ['HIGH', 'MEDIUM', 'LOW'].includes(riskLevel.toUpperCase())) {
+      query += `WHERE risk_level = @riskLevel\n`;
+    }
+    
+    query += `ORDER BY mean_squared_error DESC
+      LIMIT @limit`;
 
-    const options = {
-      query,
-      params: { limit },
-    };
+    const params: Record<string, unknown> = { limit };
+    if (riskLevel) {
+      params.riskLevel = riskLevel.toUpperCase();
+    }
 
-    const [job] = await bigquery.createQueryJob(options);
+    const [job] = await bigquery.createQueryJob({ query, params });
     const [rows] = await job.getQueryResults();
 
     const results: HighRiskBeneficiary[] = rows.map((row) => ({
       beneficiary_id: row.beneficiary_id,
-      residence_district: row.residence_district || 'Unknown',
-      risk_score: Number(row.risk_score),
-      total_txns: Number(row.total_txns) || 0,
-      avg_amount: Number(row.avg_amount) || 0,
-      txns_last_30d: Number(row.txns_last_30d) || 0,
-      unique_dealers: Number(row.unique_dealers) || 0,
-      cross_district_txns: Number(row.cross_district_txns) || 0,
-      risk_reasons: generateRiskReasons(
-        Number(row.cross_district_txns) || 0,
-        Number(row.total_txns) || 0,
-        Number(row.unique_dealers) || 0,
-        Number(row.txns_last_30d) || 0
-      ),
+      risk_level: row.risk_level || 'UNKNOWN',
+      mean_squared_error: Number(row.mean_squared_error) || 0,
+      flag_high_recent_activity: Boolean(row.flag_high_recent_activity),
+      flag_multiple_dealers: Boolean(row.flag_multiple_dealers),
+      flag_cross_district: Boolean(row.flag_cross_district),
+      flag_high_lifetime_usage: Boolean(row.flag_high_lifetime_usage),
     }));
 
     return NextResponse.json(results);

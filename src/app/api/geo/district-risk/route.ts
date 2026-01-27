@@ -10,7 +10,7 @@ export async function GET() {
       SELECT
         b.residence_district,
         COUNT(*) AS anomaly_count
-      FROM \`gfg-fot.lpg_fraud_detection.fraud_results\` fr
+      FROM \`gfg-fot.lpg_fraud_detection.fraud_results_banded\` fr
       JOIN \`gfg-fot.lpg_fraud_detection.Beneficiaries\` b
       ON fr.beneficiary_id = b.beneficiary_id
       WHERE fr.is_anomaly = TRUE
