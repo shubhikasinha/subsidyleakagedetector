@@ -24,7 +24,7 @@ export default function Header() {
                         <span>Government of India</span>
                     </div>
                     <div className="flex items-center gap-4 text-xs">
-                        <span className="hidden md:inline">Advisory Decision Support System</span>
+                        <span className="hidden md:inline">JanAvlokan | Subsidy Intelligence Platform</span>
                         <div className="flex items-center gap-1">
                             <span className="w-3 h-3 rounded-full bg-govt-saffron"></span>
                             <span className="w-3 h-3 rounded-full bg-white"></span>
@@ -56,8 +56,8 @@ export default function Header() {
                                     key={link.path}
                                     to={link.path}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${location.pathname === link.path
-                                            ? 'bg-primary text-white shadow-sm'
-                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                                        ? 'bg-primary text-white shadow-sm'
+                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
                                         }`}
                                 >
                                     {link.label}
@@ -90,8 +90,8 @@ export default function Header() {
                                     to={link.path}
                                     onClick={() => setIsMenuOpen(false)}
                                     className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${location.pathname === link.path
-                                            ? 'bg-primary text-white'
-                                            : 'text-gray-700 hover:bg-gray-100'
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-700 hover:bg-gray-100'
                                         }`}
                                 >
                                     {link.label}

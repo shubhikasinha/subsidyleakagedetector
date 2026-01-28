@@ -38,8 +38,8 @@ export default function Footer() {
                             </div>
                         </div>
                         <p className="text-sm text-white/80 mb-4 leading-relaxed">
-                            AI-Powered Subsidy Leakage Detector for Transparent Welfare Delivery.
-                            Supporting Viksit Bharat 2047 vision.
+                            AI-Powered Subsidy Intelligence Platform for Transparent Welfare Delivery.
+                            Ministry of Electronics & Information Technology.
                         </p>
                         <div className="flex items-center gap-2">
                             <span className="w-4 h-4 rounded-full bg-govt-saffron"></span>
@@ -117,7 +117,7 @@ export default function Footer() {
                             <span>This system is advisory-only. It does not approve, deny, or block subsidies.</span>
                         </div>
                         <div className="text-white/60">
-                            © 2026 JanAvlokan | Hack-4Viksit Bharat
+                            © 2026 JanAvlokan | Ministry of Electronics & IT
                         </div>
                     </div>
                 </div>

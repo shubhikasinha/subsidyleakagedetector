@@ -1,28 +1,5 @@
 import { Button } from '../components';
 
-const timeline = [
-    {
-        year: '2024',
-        title: 'Project Inception',
-        description: 'Conceptualized as part of Hack-4Viksit Bharat initiative',
-    },
-    {
-        year: '2025',
-        title: 'Prototype Development',
-        description: 'Built cloud-native platform on Google Cloud Platform',
-    },
-    {
-        year: '2026',
-        title: 'Pilot Phase',
-        description: 'Testing with anonymized sample datasets',
-    },
-    {
-        year: '2047',
-        title: 'Viksit Bharat Vision',
-        description: 'Contributing to transparent welfare ecosystem',
-    },
-];
-
 const principles = [
     {
         title: 'Privacy First',
@@ -52,8 +29,8 @@ export default function AboutPage() {
                         About JanAvlokan
                     </h1>
                     <p className="text-lg text-gray-700 max-w-3xl">
-                        A practical step toward a fairer, more accountable welfare ecosystem—aligned
-                        with the vision of Viksit Bharat 2047.
+                        A welfare intelligence platform designed to support transparent and accountable
+                        subsidy delivery across India's welfare ecosystem.
                     </p>
                 </div>
             </section>
@@ -73,19 +50,18 @@ export default function AboutPage() {
                                 <p>
                                     Government welfare programs in India serve millions daily across food security,
                                     education, energy, and employment schemes. Due to the massive scale, diversity
-                                    of schemes, and regional variations, traditional audit mechanisms struggle to
-                                    monitor misuse in real time.
+                                    of schemes, and regional variations, traditional audit mechanisms need modern
+                                    technological support to monitor distribution effectively.
                                 </p>
                                 <p>
-                                    Public finance studies and Comptroller and Auditor General (CAG) reports
-                                    estimate that <strong>20-40% of subsidy value</strong> is lost to inefficiencies
-                                    or leakage across large-scale schemes.
-                                </p>
-                                <p>
-                                    JanAvlokan addresses this critical need for a <strong>scalable, privacy-preserving,
-                                        and explainable intelligence system</strong> that can flag high-risk patterns early,
-                                    assist administrators in prioritizing audits, and preserve fairness for genuine
+                                    JanAvlokan provides a <strong>scalable, privacy-preserving,
+                                        and explainable intelligence system</strong> that flags high-risk patterns early,
+                                    assists administrators in prioritizing audits, and preserves fairness for genuine
                                     beneficiaries.
+                                </p>
+                                <p>
+                                    The platform operates as an advisory layer, ensuring that welfare delivery
+                                    continues uninterrupted while providing administrators with actionable insights.
                                 </p>
                             </div>
                         </div>
@@ -127,54 +103,69 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Timeline */}
+            {/* Integration Section */}
             <section className="py-12 md:py-16 bg-white">
-                <div className="max-w-4xl mx-auto px-4">
+                <div className="max-w-7xl mx-auto px-4">
                     <div className="border-l-4 border-primary pl-6 mb-8">
                         <h2 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-2">
-                            Project Timeline
+                            System Integration
                         </h2>
-                        <p className="text-gray-600">Journey to Viksit Bharat</p>
+                        <p className="text-gray-600">Designed to work seamlessly with existing infrastructure</p>
                     </div>
 
-                    <div className="space-y-4">
-                        {timeline.map((item, index) => (
-                            <div key={index} className="flex gap-4 items-start">
-                                <div className="w-16 h-10 bg-primary text-white rounded flex items-center justify-center font-bold text-sm flex-shrink-0">
-                                    {item.year}
-                                </div>
-                                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 flex-1">
-                                    <h3 className="font-heading font-semibold text-gray-900 mb-1">{item.title}</h3>
-                                    <p className="text-sm text-gray-600">{item.description}</p>
-                                </div>
-                            </div>
-                        ))}
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                            <h3 className="font-heading font-semibold text-gray-900 mb-4 text-lg">Compatible Systems</h3>
+                            <ul className="space-y-3">
+                                {[
+                                    'Direct Benefit Transfer (DBT) Platform',
+                                    'Public Financial Management System (PFMS)',
+                                    'Aadhaar-based Payment Bridge (ABPS)',
+                                    'State-level welfare databases',
+                                ].map((item, index) => (
+                                    <li key={index} className="flex items-center gap-3 text-gray-700">
+                                        <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></span>
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                            <h3 className="font-heading font-semibold text-gray-900 mb-4 text-lg">Supported Schemes</h3>
+                            <ul className="space-y-3">
+                                {[
+                                    'PM-KISAN (Agriculture Support)',
+                                    'MGNREGA (Employment Guarantee)',
+                                    'PDS (Food Distribution)',
+                                    'Ujjwala (LPG Subsidy)',
+                                ].map((item, index) => (
+                                    <li key={index} className="flex items-center gap-3 text-gray-700">
+                                        <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></span>
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Viksit Bharat Section - White */}
+            {/* CTA Section */}
             <section className="py-12 md:py-16 bg-white border-t border-gray-200">
                 <div className="max-w-4xl mx-auto px-4 text-center">
-                    <div className="flex justify-center gap-2 mb-6">
-                        <span className="w-5 h-5 rounded-full bg-govt-saffron"></span>
-                        <span className="w-5 h-5 rounded-full bg-gray-300"></span>
-                        <span className="w-5 h-5 rounded-full bg-govt-green"></span>
-                    </div>
                     <h2 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-4">
-                        Supporting Viksit Bharat 2047
+                        Learn More
                     </h2>
                     <p className="text-gray-600 mb-8 max-w-3xl mx-auto">
-                        JanAvlokan is part of the Hack-4Viksit Bharat initiative, contributing to
-                        India's vision of becoming a developed nation by 2047 through transparent,
-                        efficient, and accountable governance.
+                        Explore our technology stack or access the dashboard to see the platform in action.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         <Button to="/technology">
-                            Explore Our Technology
+                            Technical Documentation
                         </Button>
-                        <Button variant="secondary" to="/contact">
-                            Partner With Us
+                        <Button variant="secondary" to="/dashboard">
+                            Access Dashboard
                         </Button>
                     </div>
                 </div>

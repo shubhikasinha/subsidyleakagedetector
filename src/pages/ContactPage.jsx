@@ -50,8 +50,8 @@ export default function ContactPage() {
                         Contact Us
                     </h1>
                     <p className="text-lg text-gray-700 max-w-3xl">
-                        Have questions about JanAvlokan? Want to explore partnership opportunities?
-                        We'd love to hear from you.
+                        Have questions about JanAvlokan? Need technical support or assistance?
+                        We're here to help.
                     </p>
                 </div>
             </section>
@@ -148,9 +148,8 @@ export default function ContactPage() {
                                                 >
                                                     <option value="">-- Select a subject --</option>
                                                     <option value="general">General Inquiry</option>
-                                                    <option value="demo">Request a Demo</option>
-                                                    <option value="partnership">Partnership Opportunity</option>
-                                                    <option value="technical">Technical Question</option>
+                                                    <option value="technical">Technical Support</option>
+                                                    <option value="integration">Integration Assistance</option>
                                                     <option value="feedback">Feedback</option>
                                                     <option value="other">Other</option>
                                                 </select>
@@ -229,8 +228,8 @@ export default function ContactPage() {
                     <div className="space-y-4">
                         {[
                             {
-                                q: 'Is JanAvlokan currently deployed?',
-                                a: 'JanAvlokan is currently a prototype developed as part of the Hack-4Viksit Bharat initiative. We are seeking partnerships for pilot deployments with state governments.',
+                                q: 'How is JanAvlokan deployed?',
+                                a: 'JanAvlokan is deployed as a cloud-native platform on Google Cloud infrastructure. It integrates with existing DBT/PFMS systems as an advisory layer without requiring changes to payment infrastructure.',
                             },
                             {
                                 q: 'How does JanAvlokan protect beneficiary privacy?',

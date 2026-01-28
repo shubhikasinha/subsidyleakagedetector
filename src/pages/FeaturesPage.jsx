@@ -85,7 +85,7 @@ export default function FeaturesPage() {
                     </h1>
                     <p className="text-lg text-gray-700 max-w-3xl">
                         Powered by unsupervised machine learning, privacy-preserving technology,
-                        and explainable AI for transparent governance.
+                        and explainable AI.
                     </p>
                 </div>
             </section>
@@ -209,13 +209,13 @@ export default function FeaturesPage() {
             <section className="py-12 md:py-16 bg-white border-t border-gray-200">
                 <div className="max-w-4xl mx-auto px-4 text-center">
                     <h2 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-4">
-                        See JanAvlokan in Action
+                        Access Dashboard
                     </h2>
                     <p className="text-gray-600 mb-8">
-                        Explore our interactive dashboard demonstration
+                        View real-time risk analysis and monitoring
                     </p>
                     <Button to="/dashboard">
-                        View Risk Dashboard Demo
+                        Go to Dashboard
                     </Button>
                 </div>
             </section>
