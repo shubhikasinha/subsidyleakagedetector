@@ -29,9 +29,11 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="lg:col-span-1">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">ज</span>
-                            </div>
+                            <img
+                                src="/logojan.jpeg"
+                                alt="JanAvlokan Logo"
+                                className="h-12 w-auto bg-white rounded p-1"
+                            />
                             <div className="flex flex-col">
                                 <span className="text-xl font-heading font-bold">JanAvlokan</span>
                                 <span className="text-xs text-white/70">जनावलोकन</span>
