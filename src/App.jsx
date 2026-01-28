@@ -7,6 +7,7 @@ import {
   TechnologyPage,
   DashboardPage,
   ContactPage,
+  AnalyticsPage,
 } from './pages';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
           </Routes>
         </main>
         <Footer />
